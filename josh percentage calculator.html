@@ -1,0 +1,91 @@
+<!-- 
+
+Version 1.1
+Written by Caleb White to help his little bro work out some invoices.
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<style type="text/css">body{margin:40px auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0 10px}h1,h2,h3{line-height:1.2}.line{border-top: 1px solid #ccc; margin-top: 10px; padding-top: 10px; width: 50%}label{margin-right:20px;}</style>
+	<script>
+		const amex_percent = 2.02; // percent you charge customer for amex.
+		const gst_percent = 10; // percent of government tax.
+		const amex_fee = 1.8; // percent of transaction amex will take.
+		
+		function calculate(){
+			var productgst_cost = parseInt(document.getElementById("productgst-cost").value);
+			var product = document.getElementById("product");
+			var amex = document.getElementById("amex");
+			var subtotal = document.getElementById("subtotal");
+			var gst = document.getElementById("gst");
+			var total = document.getElementById("total");
+			var pocket = document.getElementById("pocket");
+			var product_cost = (productgst_cost/110)*100;
+			var amex_cost = 0;
+			var amex_charge = 0;
+			
+			if(document.getElementById("amex-ch").checked){
+				amex_cost = percent(product_cost, amex_percent);
+			}
+			
+			var subtotal_cost = product_cost+amex_cost;
+			var gst_cost = percent(subtotal_cost, gst_percent);
+			var total_cost = subtotal_cost+gst_cost;
+			
+			if(document.getElementById("amex-ch").checked){
+				amex_charge = total_cost*(amex_fee/100);
+			}
+			var pocket_amt = total_cost-amex_charge-gst_cost;
+			
+			product.innerHTML = "$"+product_cost.toFixed(2);
+			amex.innerHTML = "$"+amex_cost.toFixed(2);
+			subtotal.innerHTML = "$"+subtotal_cost.toFixed(2);
+			gst.innerHTML = "$"+gst_cost.toFixed(4);
+			total.innerHTML = "$"+total_cost.toFixed(2);
+			pocket.innerHTML = "$"+pocket_amt.toFixed(2);
+			
+		}
+		function percent(cost, pc){
+			return (cost/100)*pc;
+		}
+	</script>
+</head>
+<body>
+	<h1>Josh's cost calculator</h1>
+	<form>
+		<ul style="list-style: none;">
+			<li>
+				<label>Product cost (inc. GST): </label><input id="productgst-cost">
+			</li>
+			<li>
+				<label>Amex? </label><input id="amex-ch" type="checkbox">
+			</li>
+			<li>
+				<input id="go" type="button" value="go" onclick="calculate()">
+			</li>
+			<br><br>
+			<li class="line">
+				<label>Product: </label><b id="product"></b>
+			</li>
+			<li>
+				<label>Amex charge: </label><b id="amex"></b>
+			</li>
+			<li class="line">
+				<label>Sub-total: </label><b id="subtotal"></b>
+			</li>
+			<li class="line">
+				<label>GST: </label><b id="gst"></b>
+			</li>
+			<li class="line">
+				<label>Total: </label><b id="total"></b>
+			</li>
+			<br><br>
+			if Amex take 1.8% of total transaction and government take gst
+			<li>
+				<label>Pocket: </label><b id="pocket"></b>
+			</li>
+		</ul>
+	</form>
+</body>
+</html>
