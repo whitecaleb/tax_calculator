@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -23,8 +24,7 @@ func (i *input) set(reader *bufio.Reader) {
 		fmt.Println(err.Error())
 		return
 	}
-
-	i.string = text[:len(text)-1]
+	i.string = strings.TrimSpace(text)
 }
 
 func main() {
